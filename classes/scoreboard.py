@@ -14,20 +14,21 @@ class Scoreboard:
 
         self.app = Flask(__name__)
 
-    def sort_team(self, service):
+    @staticmethod
+    def sort_team(service):
         count = 0
         team_name, services = service
-	
         for service in services:
             count += round((services[service]['uptime'] * (int(services[service]['attack']) + int(services[service]['defense'])) * 0.01), 2) 
-            #count += int(services[service]['attack']) + int(services[service]['defense'])
-
-
+            # count += int(services[service]['attack']) + int(services[service]['defense'])
         return count
-    def sort_service(self, service):
+
+    @staticmethod
+    def sort_service(service):
         print('service')
         print(service)
         return 1
+
     """ Seee http://flask.pocoo.org/docs/0.10/tutorial/dbcon/#tutorial-dbcon """
     def start(self):
         @self.app.route("/")
@@ -42,7 +43,11 @@ class Scoreboard:
                 sc = {}
                 teams = {}
 
-                color = {'UP':'success', 'DOWN':'danger', 'CORRUPT':'warning' ,'MUMBLE':'info'}
+                color = {'UP': 'success',
+                         'DOWN': 'danger',
+                         'CORRUPT': 'warning',
+                         'MUMBLE': 'info'
+                         }
 
                 visitor_team = self.db.teams.find_one({'host': request.remote_addr})
                 if visitor_team == None:
@@ -72,8 +77,6 @@ class Scoreboard:
                     teams[team_name]['score'] = round(teams[team_name]['score'], 2)
 
                 sc = sorted(sc.items(), key=self.sort_team)[::-1]
-		
-
                 return render_template('index.html',
                                        scoreboard=sc,
                                        color=color,
@@ -126,21 +129,21 @@ class Scoreboard:
                     teams[team_name]['score'] = round(teams[team_name]['score'], 2)
 
                 sc = sorted(sc.items(), key=self.sort_team)[::-1]
-                for i,a in enumerate(sc):
+                for i, a in enumerate(sc):
                     print(str(i))
-                    #sc[i] = sorted(sc[i].items(), key=self.sort_service)
+                    # sc[i] = sorted(sc[i].items(), key=self.sort_service)
                     
 
-                #print(sc)
+                # print(sc)
                 return render_template('index.html',
                                        scoreboard=sc,
                                        color=color,
                                        teams=teams,
                                        round=count_round
                                        )
-            #except Exception as e:
-                #print(e)
-                #return render_template('is_not_avialable.html')
+            # except Exception as e:
+                # print(e)
+                # return render_template('is_not_avialable.html')
 
         self.app.debug = True
         self.app.run(host="0.0.0.0", port=9000, threaded=True)

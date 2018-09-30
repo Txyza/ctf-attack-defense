@@ -2,7 +2,9 @@ from __future__ import print_function
 import sys
 import threading
 import os
-import pika, time, json
+import pika
+import time
+import json
 
 from bson import json_util
 from functions import Message
@@ -44,8 +46,8 @@ class Zond:
 
     def run(self):
         self.channel.basic_consume(self.callback,
-                              queue='tasks',
-                              no_ack=True)
+                                   queue='tasks',
+                                   no_ack=True)
 
         self.channel.start_consuming()
 
@@ -80,10 +82,10 @@ class Zond:
         thread.interrupt_main()  # raises KeyboardInterrupt
 
     def exit_after(self, s):
-        '''
+        """
         use as decorator to exit process if
         function takes longer than s seconds
-        '''
+        """
 
         def outer(fn):
             def inner(*args, **kwargs):
@@ -133,7 +135,6 @@ class Zond:
             print(error)
             Message.fail(team['name'] + ' ' + service['name'] + ' ' + action + ' => error (message: ' + str(message) + ')')
             self.update_scoreboard(team, service, code, message)
-
 
     def update_scoreboard(self, team, service, status_code, message=''):
         codes = {

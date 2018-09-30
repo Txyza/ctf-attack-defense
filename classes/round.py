@@ -1,8 +1,6 @@
 from config.main import CHECKER_METHOD
 from functions import Message
 
-
-
 from classes.checker.threads import Threads
 from classes.statistic import Statistic
 from classes.config.get import ConfigGet
@@ -30,7 +28,6 @@ class Round:
         # else:
         #     self.checkerManager = Threads()
 
-
         Message.info('Get last round number')
 
         self.get_round_number()
@@ -41,7 +38,7 @@ class Round:
         Message.info('Now use python3 main.py init --slave for starting slave client')
 
     def next(self):
-        #TODO: косяк в status_service
+        # TODO: косяк в status_service
         # Подводим итоги предыдущего раунда
 
         self.statistic.summary(self.round_count)
@@ -69,13 +66,15 @@ class Round:
 
         self.checkerManager.run()
 
-    def generate_flags(self):
+    @staticmethod
+    def generate_flags():
         flag = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for x in range(33))
         flag += '='
 
         return flag
 
-    def generate_flag_ids(self):
+    @staticmethod
+    def generate_flag_ids():
         return ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for x in range(10))
 
     # Получаем номер раунда

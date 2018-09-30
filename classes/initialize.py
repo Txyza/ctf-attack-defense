@@ -1,6 +1,7 @@
 from classes.config.put import Put as ConfigPut
-import os, stat
+import os
 from functions import Message
+
 
 class Initialize:
     config = ''

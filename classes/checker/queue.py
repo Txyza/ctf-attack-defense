@@ -1,10 +1,10 @@
 import pika, json
 from bson import json_util
 
+
 class Queue:
     list = []
     queue_name = 'tasks'
-
 
     def __init__(self):
         # Устанавливаем соединение

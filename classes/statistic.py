@@ -1,5 +1,6 @@
 from config.main import CHECKER
 
+
 class Statistic:
     codes = {
         'UP': 101,

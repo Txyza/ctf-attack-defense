@@ -1,6 +1,7 @@
 # from classes.`
 import threading
 
+
 class Threads:
     list = []
     thread = []
@@ -25,7 +26,6 @@ class Threads:
 
         for e, j in enumerate(self.thread):
             j.join(timeout=1)
-
 
     def clear(self):
         self.list = []
