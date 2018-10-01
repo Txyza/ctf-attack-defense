@@ -44,6 +44,7 @@ def scoreboard(parse):
     scoreboard = Scoreboard(db)
     scoreboard.start()
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='The platform for the CTF-competition (Attack-Defense)',
                                      epilog='''Order of actions: init -> start -> flags -> scoreboard.

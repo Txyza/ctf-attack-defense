@@ -61,7 +61,7 @@ class Flags:
                 break
 
         if not bool(team):
-            connection.send(('Who are you?\n Goodbye\n').encode())
+            connection.send('Who are you?\n Goodbye\n'.encode())
             connection.close()    
         else:
             try:
@@ -77,24 +77,22 @@ class Flags:
             data = connection.recv(1024)
             data = str(data.rstrip().decode('utf-8'))
 
-            if not re.match('^\w{33}=$',data):
-                connection.send(('this is not flag\n').encode())
+            if not re.match('^\w{33}=$', data):
+                connection.send('this is not flag\n'.encode())
                 continue
 
             flag = self.db.flags.find_one({'flag': data})
 
-            
             if not bool(flag):    
-                connection.send(('Flag is not found\n').encode())
+                connection.send('Flag is not found\n'.encode())
                 continue
 
             if flag['team']['_id'] == team['_id']:
-                connection.send(('It`s your flag\n').encode())
+                connection.send('It`s your flag\n'.encode())
                 continue
 
-
             if (self.life + flag["timestamp"]) <= time.time():
-                connection.send(('This flag is too old\n').encode())
+                connection.send('This flag is too old\n'.encode())
                 continue
 
             status = self.db.scoreboard.find_one({
@@ -103,10 +101,10 @@ class Flags:
             })
 
             if status["status"] != 'UP':
-                connection.send(('Your service '+ flag['service']['name'] +' is not working\n').encode())
+                connection.send(('Your service ' + flag['service']['name'] + ' is not working\n').encode())
                 continue
 
-            count_round = self.db.flags.find().sort([ ('round', pymongo.DESCENDING) ]).limit(1)[0]['round']
+            count_round = self.db.flags.find().sort([('round', pymongo.DESCENDING)]).limit(1)[0]['round']
 
             is_stolen = self.db.stolen_flags.find_one({
                 'team._id': team['_id'],
@@ -114,7 +112,7 @@ class Flags:
             })
 
             if is_stolen:
-                connection.send(('You are already pass this flag\n').encode())
+                connection.send('You are already pass this flag\n'.encode())
                 continue
 
             self.db.stolen_flags.insert_one({
@@ -126,4 +124,4 @@ class Flags:
 
             self.db.flags.update_one({'flag': data}, {"$set": {"stolen": True}})
 
-            connection.send(('Accepted\n').encode())
+            connection.send('Accepted\n'.encode())

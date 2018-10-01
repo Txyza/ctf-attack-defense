@@ -1,10 +1,8 @@
 from flask import Flask
 from flask import render_template
-from flask import jsonify
 from flask import request
 
 import pymongo
-import json
 
 
 class Scoreboard:
@@ -99,13 +97,16 @@ class Scoreboard:
                 sc = {}
                 teams = {}
 
-                color = {'UP':'success', 'DOWN':'danger', 'CORRUPT':'warning' ,'MUMBLE':'info'}
+                color = {'UP': 'success',
+                         'DOWN': 'danger',
+                         'CORRUPT': 'warning',
+                         'MUMBLE': 'info'}
 
                 visitor_team = self.db.teams.find_one({'host': request.remote_addr})
                 if visitor_team == None:
                     visitor_team = {'_id': ''}
 
-                count_round = self.db.flags.find().sort([ ('round', pymongo.DESCENDING) ]).limit(1)[0]['round']
+                count_round = self.db.flags.find().sort([('round', pymongo.DESCENDING)]).limit(1)[0]['round']
 
                 for item in scoreboard:
                     team_name = item['team']['name']
